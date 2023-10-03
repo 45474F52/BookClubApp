@@ -1,0 +1,27 @@
+﻿<Application x:Class="BookClubApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:view="clr-namespace:BookClubApp.View"
+             xmlns:vm="clr-namespace:BookClubApp.ViewModel">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                
+            </ResourceDictionary.MergedDictionaries>
+
+            <view:OrderDialogWindow x:Key="{x:Type vm:OrderVM}"
+                                    x:Shared="False" />
+
+            <DataTemplate DataType="{x:Type vm:ProductsVM}">
+                <view:ProductsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:OrderVM}">
+                <view:OrderDialogWindow />
+            </DataTemplate>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

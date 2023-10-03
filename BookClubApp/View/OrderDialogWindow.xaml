@@ -1,0 +1,115 @@
+﻿<Window x:Class="BookClubApp.View.OrderDialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BookClubApp.ViewModel"
+        xmlns:db="clr-namespace:BookClubApp.Model.Database"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        Height="450"
+        Width="800"
+        FontSize="14"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.DataContext>
+        <vm:OrderVM />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <ListView ItemsSource="{Binding Products}"
+                  HorizontalContentAlignment="Stretch"
+                  Focusable="False">
+
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type db:Product}">
+                    <Border CornerRadius="10"
+                            Padding="10"
+                            Margin="5"
+                            BorderThickness="1"
+                            BorderBrush="Black">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".5*" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center" />
+
+                            <TextBlock Grid.Column="1"
+                                       VerticalAlignment="Center">
+                                
+                                <Run Text="{Binding PriceWithDiscount, StringFormat=\{0:C\}, Mode=OneWay}" />
+                                <Run Text=" = " />
+                                <Run Text="{Binding Price, StringFormat=\{0:C\}, Mode=OneWay}" />
+                                <Run Text=" &amp; " />
+                                <Run Text="{Binding DiscountPercent, StringFormat=\{0:P\}, Mode=OneWay}" />
+                            </TextBlock>
+
+                            <Grid Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.Resources>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="MinWidth"
+                                                Value="30" />
+                                        <Setter Property="MinHeight"
+                                                Value="30" />
+                                        <Setter Property="Cursor"
+                                                Value="Hand" />
+                                        <Setter Property="Margin"
+                                                Value="5 0" />
+                                    </Style>
+                                </Grid.Resources>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="➕" />
+                                    <Button Content="➖" />
+                                </StackPanel>
+
+                                <Button Grid.Column="1"
+                                        Background="Red"
+                                        Content="❌" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Focusable"
+                            Value="False" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
+
+        <Button Grid.Row="1"
+                HorizontalAlignment="Center"
+                Padding="50 5"
+                Margin="0 10"
+                Cursor="Hand"
+                FontSize="16"
+                Content="Сделать заказ" />
+    </Grid>
+</Window>

@@ -1,0 +1,70 @@
+﻿<Window x:Class="BookClubApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BookClubApp.ViewModel"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        Height="450"
+        Width="800"
+        WindowState="Maximized">
+
+    <Window.DataContext>
+        <vm:MainVM />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="10 0">
+
+                <Image VerticalAlignment="Center" />
+                <TextBlock FontSize="16"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center">
+                    
+                    <Run Text="{Binding Client.Login}" />
+                </TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Column="2">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Padding="10"
+                        Cursor="Hand"
+                        FontSize="14"
+                        Command="{Binding AuthorizeCommand}">
+                    <TextBlock Text="👤" />
+                </Button>
+
+                <Button Grid.Column="1"
+                        Padding="10"
+                        Margin="30 0"
+                        Cursor="Hand"
+                        FontSize="14"
+                        Command="{Binding UnauthorizeCommand}">
+                    <TextBlock Text="❌" />
+                </Button>
+            </Grid>
+        </Grid>
+
+        <ContentControl Grid.Row="1"
+                        Content="{Binding CurrentView}" />
+    </Grid>
+</Window>
