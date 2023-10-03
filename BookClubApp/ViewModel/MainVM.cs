@@ -20,17 +20,23 @@ namespace BookClubApp.ViewModel
 
 			CurrentView = ProductsVM;
 
-            AuthorizeCommand = new RelayCommand(_ => { }, __ => false);
-            UnauthorizeCommand = new RelayCommand(_ => { }, __ => false);
+            AuthorizeCommand = new RelayCommand(_ => DialogWindow = new AuthRegVM());
 
-			Dispatcher.CurrentDispatcher.Invoke(async () =>
-			{
-				using (BookClubEntities db = new BookClubEntities())
-				{
-					Client = await db.Client.FindAsync(1)
-					?? throw new InvalidOperationException("Отсутствует гостевой аккаунт");
-				}
-			});
+            UnauthorizeCommand = new RelayCommand(_ => GetGuest(), __ => Client?.PositionID != 1);
+
+			GetGuest();
+        }
+
+		private void GetGuest()
+		{
+            Dispatcher.CurrentDispatcher.Invoke(async () =>
+            {
+                using (BookClubEntities db = new BookClubEntities())
+                {
+                    Client = await db.Client.FindAsync(1)
+                    ?? throw new InvalidOperationException("Отсутствует гостевой аккаунт");
+                }
+            });
         }
 
 		private BaseVM _currentView;
@@ -49,6 +55,17 @@ namespace BookClubApp.ViewModel
 			}
 		}
 
+		private object _dialogWindow;
+		public object DialogWindow
+		{
+			get => _dialogWindow;
+			private set
+			{
+				_dialogWindow = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private Client _client;
 		public Client Client
 		{
@@ -61,5 +78,6 @@ namespace BookClubApp.ViewModel
 		}
 
         public static Client GetClient() => (System.Windows.Application.Current.MainWindow.DataContext as MainVM).Client;
+		public static void SetClient(Client client) => (System.Windows.Application.Current.MainWindow.DataContext as MainVM).Client = client;
     }
 }

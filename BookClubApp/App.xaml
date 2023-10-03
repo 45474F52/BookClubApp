@@ -14,6 +14,9 @@
             <view:OrderDialogWindow x:Key="{x:Type vm:OrderVM}"
                                     x:Shared="False" />
 
+            <view:AuthRegWindow x:Key="{x:Type vm:AuthRegVM}"
+                                    x:Shared="False" />
+
             <DataTemplate DataType="{x:Type vm:ProductsVM}">
                 <view:ProductsView />
             </DataTemplate>
@@ -21,7 +24,11 @@
             <DataTemplate DataType="{x:Type vm:OrderVM}">
                 <view:OrderDialogWindow />
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type vm:AuthRegVM}">
+                <view:AuthRegWindow />
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

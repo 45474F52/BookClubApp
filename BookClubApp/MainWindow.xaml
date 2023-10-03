@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:BookClubApp.ViewModel"
+        xmlns:core="clr-namespace:BookClubApp.Core"
         mc:Ignorable="d"
         Title="{Binding Title}"
         Height="450"
         Width="800"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        core:ModalDialogWindowBehaviour.ModalDialogWindow="{Binding DialogWindow}">
 
     <Window.DataContext>
         <vm:MainVM />
