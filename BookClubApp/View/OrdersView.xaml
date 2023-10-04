@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="BookClubApp.View.OrdersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:BookClubApp.ViewModel"
+             xmlns:db="clr-namespace:BookClubApp.Model.Database"
+             xmlns:core="clr-namespace:BookClubApp.Core"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             core:ModalDialogWindowBehaviour.ModalDialogWindow="{Binding DialogWindow}">
+
+    <UserControl.DataContext>
+        <vm:OrdersVM />
+    </UserControl.DataContext>
+
+    <Grid>
+        <ListView Background="WhiteSmoke"
+                  Focusable="False"
+                  FontSize="16"
+                  SelectionMode="Single"
+                  HorizontalContentAlignment="Stretch"
+                  ItemsSource="{Binding Orders}">
+
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type db:Order}">
+                    <Border Margin="5"
+                            Padding="10"
+                            BorderThickness="1"
+                            BorderBrush="Black"
+                            CornerRadius="20 0 20 0"
+                            Background="Transparent">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontWeight="Bold"
+                                           Margin="0 0 0 10">
+                                    
+                                    <Run Text="Заказ: " />
+                                    <Run Text="{Binding PickupCode, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Margin="0 0 0 10">
+                                    <Run Text="Статус: " />
+                                    <Run Text="{Binding OrderStatus.Status, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Создан:" />
+                                    <LineBreak />
+                                    <Run Text="    Когда: " />
+                                    <Run Text="{Binding CreationDate, Mode=OneWay}" />
+                                    <LineBreak />
+                                    <Run Text="    Кем: " />
+                                    <Run Text="{Binding Client.Login, Mode=OneWay}" />
+                                    <Run Text="{Binding Client.UserPosition.Position, Mode=OneWay, StringFormat=\({0\)}}" />
+                                </TextBlock>
+                                <TextBlock FontWeight="Bold"
+                                           Margin="0 10">
+                                    
+                                    <Run Text="ИТОГ: " />
+                                    <Run Text="{Binding Summ, Mode=OneWay, StringFormat=\{0:C\}, ConverterCulture=ru-RU}" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Адрес выдачи: " />
+                                    <Run Text="{Binding OrderPickupPoint.Address, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Время доставки (в днях): " />
+                                    <Run Text="{Binding DeliveryTimeInDays, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Content="✏"
+                                        VerticalAlignment="Center"
+                                        Padding="15"
+                                        FontSize="18"
+                                        Background="Gold"
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.EditOrderCommand}"
+                                        CommandParameter="{Binding}" />
+                                <Button Grid.Column="1"
+                                        Content="🗑"
+                                        VerticalAlignment="Center"
+                                        Padding="15"
+                                        Margin="10 0 0 0"
+                                        FontSize="18"
+                                        Background="Red"
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteOrderCommand}"
+                                        CommandParameter="{Binding}" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Cursor"
+                                    Value="Hand" />
+                        </Trigger>
+                        <Trigger Property="IsSelected"
+                                 Value="True">
+
+                            <Setter Property="Foreground"
+                                    Value="ForestGreen" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
+    </Grid>
+</UserControl>

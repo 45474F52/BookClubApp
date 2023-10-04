@@ -16,6 +16,10 @@
         <vm:MainVM />
     </Window.DataContext>
 
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVis" />
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -37,9 +41,38 @@
                            FontWeight="Bold"
                            VerticalAlignment="Center">
                     
+                    <Run Text="{Binding Client.UserPosition.Position}" />
+                    <Run Text=": " />
                     <Run Text="{Binding Client.Login}" />
                 </TextBlock>
             </StackPanel>
+
+            <Grid Grid.Column="1">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Padding="20 10"
+                        HorizontalAlignment="Center"
+                        Cursor="Hand"
+                        FontSize="14"
+                        Command="{Binding GoToProductsCommand}"
+                        Visibility="{Binding ExtraCommandsIsVisible, Converter={StaticResource boolToVis}}">
+                    <TextBlock Text="Товары" />
+                </Button>
+                
+                <Button Grid.Column="1"
+                        Padding="20 10"
+                        HorizontalAlignment="Center"
+                        Cursor="Hand"
+                        FontSize="14"
+                        Command="{Binding GoToOrdersCommand}"
+                        Visibility="{Binding ExtraCommandsIsVisible, Converter={StaticResource boolToVis}}">
+                    <TextBlock Text="Заказы" />
+                </Button>
+            </Grid>
 
             <Grid Grid.Column="2">
 

@@ -55,23 +55,26 @@ namespace BookClubApp.ViewModel
                 if (_password == null || _passwordConfirm == null)
                     return false;
 
-                bool hasEmpty = string.IsNullOrWhiteSpace(_login) && _password.Length == 0 && _passwordConfirm.Length == 0;
+                bool hasEmpty = _password.Length == 0 && _passwordConfirm.Length == 0;
                 bool confirmed = _password.ToUnsecuredString() == _passwordConfirm.ToUnsecuredString();
-                return !hasEmpty && confirmed;
+                return !string.IsNullOrWhiteSpace(_login) && !hasEmpty && confirmed;
             }
         }
 
         public AuthRegVM()
         {
-            Title = "Авторизуйтесь 🥷";
-
+            Title = "Авторизуйтесь 👤";
+            Password = new SecureString();
+            PasswordConfirm = new SecureString();
             AuthCommand = new RelayCommand(async _ => await AuthorizationFunc(), __ => ValuesIsValid);
         }
 
         private void DisposePasswords()
         {
             Password.Dispose();
+            Password = null;
             PasswordConfirm.Dispose();
+            PasswordConfirm = null;
         }
 
         private void Complete()
@@ -101,15 +104,15 @@ namespace BookClubApp.ViewModel
                         return;
                     }
                     else
-                        MainVM.SetClient(client);
+                        UpdateClient(client);
                 }
                 else
                 {
                     MessageBoxResult result = MessageBox.Show(
-                            "Пользователь не существует!",
                             "Пользователь с такими авторизационными данными не найден!"
                             + Environment.NewLine + Environment.NewLine
                             + "Зарегистрировать нового пользователя?",
+                            "Пользователь не существует!",
                             MessageBoxButton.YesNo, MessageBoxImage.Information);
 
                     if (result == MessageBoxResult.Yes)
@@ -118,16 +121,23 @@ namespace BookClubApp.ViewModel
                         {
                             Login = _login,
                             Password = _password.ToUnsecuredString(),
-                            PositionID = 1
+                            PositionID = (int)UserPosition.Positions.Client
                         };
 
                         db.Client.Add(client);
                         await db.SaveChangesAsync();
+                        UpdateClient(client);
                     }
                 }
 
                 Complete();
             }
+        }
+
+        private void UpdateClient(Client client)
+        {
+            MainVM.SetClient(client);
+            MessageBox.Show("Авторизация прошла успешно!", "Успех!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

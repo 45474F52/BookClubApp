@@ -2,7 +2,10 @@
 using BookClubApp.Model.Database;
 using System;
 using System.Linq;
+using System.Data.Entity;
+using System.Windows.Threading;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace BookClubApp.ViewModel
 {
@@ -11,6 +14,10 @@ namespace BookClubApp.ViewModel
         private readonly Random _rnd;
 
         public RelayCommand OrderCommand { get; private set; }
+
+        public RelayCommand IncreaseCommand { get; private set; }
+        public RelayCommand DecreaseCommand { get; private set; }
+        public RelayCommand RemoveCommand { get; private set; }
 
         public Order Order { get; } = new Order();
 
@@ -28,6 +35,8 @@ namespace BookClubApp.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public decimal OrderSumm => Order.Product.Sum(p => p.TotalPrice);
 
         public OrderVM()
         {
@@ -48,9 +57,70 @@ namespace BookClubApp.ViewModel
                     Order.PickupPointID = SelectedPoint.ID;
                     Order.DeliveryTimeInDays = GetDeliveryTime();
                     Order.PickupCode = GetPickupCode(db);
+                    Order.Summ = OrderSumm;
 
-                    db.Order.Add(Order);
+                    db.Order.Add(Order); // !!! Влияет на состояние товаров
+                    foreach (Product product in Order.Product)
+                        db.Entry(product).State = EntityState.Unchanged;
+
                     await db.SaveChangesAsync();
+                    MessageBox.Show(
+                        string.Format(
+                            "Заказ успешно создан!\n\n" +
+                            "Номер талона: {0}\n\n" +
+                            "Срок выполнения заказа (дней): {1}",
+                            Order.PickupCode, Order.DeliveryTimeInDays),
+                        "Успех!", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }, __ => Order.Product.Any() && SelectedPoint != null);
+
+            IncreaseCommand = new RelayCommand(arg =>
+            {
+                if (arg is Product product)
+                {
+                    Product target = Order.Product.First(p => p.ID == product.ID);
+                    ++target.CountInOrder;
+                    OnPropertyChanged(nameof(Order));
+                    OnPropertyChanged(nameof(OrderSumm));
+                }
+            });
+
+            DecreaseCommand = new RelayCommand(arg =>
+            {
+                if (arg is Product product)
+                {
+                    Product target = Order.Product.First(p => p.ID == product.ID);
+                    --target.CountInOrder;
+                    if (target.CountInOrder == 0)
+                        RemoveCommand.Execute(product);
+                    else
+                    {
+                        OnPropertyChanged(nameof(Order));
+                        OnPropertyChanged(nameof(OrderSumm));
+                    }
+                }
+            });
+
+            RemoveCommand = new RelayCommand(arg =>
+            {
+                if (arg is Product product)
+                {
+                    Product target = Order.Product.First(p => p.ID == product.ID);
+                    target.ChangeToOrderFlag();
+                    Products = Products.Where(p => p.ID != target.ID);
+                    OnPropertyChanged(nameof(Products));
+                    Order.Product.Remove(target);
+                    OnPropertyChanged(nameof(Order));
+                    OnPropertyChanged(nameof(OrderSumm));
+                }
+            });
+
+            Dispatcher.CurrentDispatcher.Invoke(async () =>
+            {
+                using (BookClubEntities db = new BookClubEntities())
+                {
+                    OrderPickupPoints = await db.OrderPickupPoint.ToListAsync();
+                    OnPropertyChanged(nameof(OrderPickupPoints));
                 }
             });
         }
@@ -59,6 +129,7 @@ namespace BookClubApp.ViewModel
         {
             Products = products;
             OnPropertyChanged(nameof(Products));
+            Order.Product = products.ToList();
         }
 
         private string GetDeliveryTime() => Products.Any(p => p.Quantity < 3) ? "6" : "3";

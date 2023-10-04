@@ -10,7 +10,7 @@
         Height="450"
         Width="800"
         FontSize="14"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <vm:OrderVM />
@@ -23,94 +23,123 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Products}"
-                  HorizontalContentAlignment="Stretch"
-                  Focusable="False">
+        <StackPanel Orientation="Vertical">
+            <ListView ItemsSource="{Binding Products}"
+                      HorizontalContentAlignment="Stretch"
+                      Focusable="False">
 
-            <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type db:Product}">
-                    <Border CornerRadius="10"
-                            Padding="10"
-                            Margin="5"
-                            BorderThickness="1"
-                            BorderBrush="Black">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type db:Product}">
+                        <Border CornerRadius="10"
+                                Padding="10"
+                                Margin="5"
+                                BorderThickness="1"
+                                BorderBrush="Black">
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width=".5*" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="{Binding Name}"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center" />
-
-                            <TextBlock Grid.Column="1"
-                                       VerticalAlignment="Center">
-                                
-                                <Run Text="{Binding PriceWithDiscount, StringFormat=\{0:C\}, Mode=OneWay}" />
-                                <Run Text=" = " />
-                                <Run Text="{Binding Price, StringFormat=\{0:C\}, Mode=OneWay}" />
-                                <Run Text=" &amp; " />
-                                <Run Text="{Binding DiscountPercent, StringFormat=\{0:P\}, Mode=OneWay}" />
-                            </TextBlock>
-
-                            <Grid Grid.Column="2">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width=".5*" />
                                     <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <Grid.Resources>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="MinWidth"
-                                                Value="30" />
-                                        <Setter Property="MinHeight"
-                                                Value="30" />
-                                        <Setter Property="Cursor"
-                                                Value="Hand" />
-                                        <Setter Property="Margin"
-                                                Value="5 0" />
-                                    </Style>
-                                </Grid.Resources>
+                                <TextBlock Text="{Binding Name}"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center" />
 
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="➕" />
-                                    <Button Content="➖" />
-                                </StackPanel>
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center">
+                                
+                                <Run Text="{Binding CountInOrder, StringFormat=\{0\} шт.,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Run Text=" ✖ " />
+                                <Run Text="{Binding Price, StringFormat=\{0:C\}, ConverterCulture=ru-RU, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Run Text=" &amp; " />
+                                <Run Text="{Binding DiscountPercent, StringFormat=\{0\}%, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Run Text=" = " />
+                                <Run Text="{Binding TotalPrice, StringFormat=\{0:C\}, ConverterCulture=ru-RU, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </TextBlock>
 
-                                <Button Grid.Column="1"
-                                        Background="Red"
-                                        Content="❌" />
+                                <Grid Grid.Column="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.Resources>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="MinWidth"
+                                                    Value="30" />
+                                            <Setter Property="MinHeight"
+                                                    Value="30" />
+                                            <Setter Property="Cursor"
+                                                    Value="Hand" />
+                                            <Setter Property="Margin"
+                                                    Value="5 0" />
+                                        </Style>
+                                    </Grid.Resources>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="➕"
+                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.IncreaseCommand}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Content="➖"
+                                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.DecreaseCommand}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1"
+                                            Background="Red"
+                                            Content="❌"
+                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RemoveCommand}"
+                                            CommandParameter="{Binding}" />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Focusable"
-                            Value="False" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Focusable"
+                                Value="False" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
 
-        </ListView>
+            </ListView>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal">
-
-            <Label Content="Точка получение заказа:" />
-            
+            <TextBlock FontWeight="Bold"
+                       FontSize="18"
+                       HorizontalAlignment="Center">
+                
+                <Run Text="ИТОГО: " />
+                <Run Text="{Binding OrderSumm, StringFormat=\{0:C\}, ConverterCulture=ru-RU, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TextBlock>
         </StackPanel>
+
+        <Grid Grid.Row="1"
+              Margin="150 0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Точка получения заказа:"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold" />
+            <ComboBox Grid.Column="1"
+                      VerticalAlignment="Center"
+                      ItemsSource="{Binding OrderPickupPoints}"
+                      SelectedItem="{Binding SelectedPoint}" />
+
+        </Grid>
 
         <Button Grid.Row="2"
                 HorizontalAlignment="Center"
@@ -118,6 +147,9 @@
                 Margin="0 10"
                 Cursor="Hand"
                 FontSize="16"
-                Content="Сделать заказ" />
+                FontWeight="Bold"
+                Content="Сделать заказ"
+                Click="Button_Click"
+                Command="{Binding OrderCommand}" />
     </Grid>
 </Window>

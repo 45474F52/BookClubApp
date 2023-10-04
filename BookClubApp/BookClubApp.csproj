@@ -68,25 +68,36 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\ModalDialogWindowBehaviour.cs" />
+    <Compile Include="Model\Database\ExtendedOrderPickupPoint.cs" />
+    <Compile Include="Model\Database\ExtendedOrderStatus.cs" />
     <Compile Include="Model\Database\ExtendedProduct.cs" />
+    <Compile Include="Model\Database\ExtendedUserPosition.cs" />
     <Compile Include="Model\Database\NoGuestAccountException.cs" />
     <Compile Include="Model\Security\PasswordBindingMarshaller.cs" />
     <Compile Include="Model\Security\PasswordBoxHelper.cs" />
     <Compile Include="Model\Security\SecureStringExtensions.cs" />
     <Compile Include="ViewModel\AuthRegVM.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
+    <Compile Include="ViewModel\EditOrderVM.cs" />
     <Compile Include="ViewModel\HomeVM.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
+    <Compile Include="ViewModel\OrdersVM.cs" />
     <Compile Include="ViewModel\OrderVM.cs" />
     <Compile Include="ViewModel\ProductsVM.cs" />
     <Compile Include="View\AuthRegWindow.xaml.cs">
       <DependentUpon>AuthRegWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditOrderWindow.xaml.cs">
+      <DependentUpon>EditOrderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\OrderDialogWindow.xaml.cs">
       <DependentUpon>OrderDialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OrdersView.xaml.cs">
+      <DependentUpon>OrdersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
@@ -109,11 +120,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\EditOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\OrderDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OrdersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

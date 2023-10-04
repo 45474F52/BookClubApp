@@ -27,6 +27,7 @@ namespace BookClubApp.Model.Database
         public int PickupPointID { get; set; }
         public string PickupCode { get; set; }
         public string DeliveryTimeInDays { get; set; }
+        public decimal Summ { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual OrderPickupPoint OrderPickupPoint { get; set; }

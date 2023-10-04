@@ -8,76 +8,109 @@ namespace BookClubApp.ViewModel
 {
     public sealed class MainVM : BaseVM
     {
-		private ProductsVM _productsVM;
-		private ProductsVM ProductsVM => LazyInitializer.EnsureInitialized(ref _productsVM);
+        public event Action<Client> OnClientUpdate;
+
+        private ProductsVM _productsVM;
+        private ProductsVM ProductsVM => LazyInitializer.EnsureInitialized(ref _productsVM, () =>
+        {
+            var productsVM = new ProductsVM();
+            OnClientUpdate += client => productsVM.IsAdmin = client.PositionID == (int)UserPosition.Positions.Administrator;
+            return productsVM;
+        });
+
+        private OrdersVM _ordersVM;
+        private OrdersVM OrdersVM => LazyInitializer.EnsureInitialized(ref _ordersVM);
 
         public RelayCommand AuthorizeCommand { get; private set; }
         public RelayCommand UnauthorizeCommand { get; private set; }
+
+        public RelayCommand GoToOrdersCommand { get; private set; }
+        public RelayCommand GoToProductsCommand { get; private set; }
 
         public MainVM()
         {
             Title = "Book Club 📚";
 
-			CurrentView = ProductsVM;
+            CurrentView = ProductsVM;
 
             AuthorizeCommand = new RelayCommand(_ => DialogWindow = new AuthRegVM());
 
             UnauthorizeCommand = new RelayCommand(_ => GetGuest(), __ => Client != null && Client.PositionID != 1);
 
-			GetGuest();
+            GoToOrdersCommand = new RelayCommand(_ => CurrentView = OrdersVM, __ => CurrentView != OrdersVM);
+            GoToProductsCommand = new RelayCommand(_ => CurrentView = ProductsVM, __ => CurrentView != ProductsVM);
+
+            GetGuest();
         }
 
-		private void GetGuest()
-		{
+        private void GetGuest()
+        {
             Dispatcher.CurrentDispatcher.Invoke(async () =>
             {
                 using (BookClubEntities db = new BookClubEntities())
                 {
                     Client = await db.Client.FindAsync(1)
-                    ?? throw new InvalidOperationException("Отсутствует гостевой аккаунт");
+                    ?? throw new NoGuestAccountException();
                 }
             });
         }
 
-		private BaseVM _currentView;
-		public BaseVM CurrentView
-		{
-			get => _currentView;
-			private set
-			{
-				if (_currentView != value)
-				{
+        private BaseVM _currentView;
+        public BaseVM CurrentView
+        {
+            get => _currentView;
+            private set
+            {
+                if (_currentView != value)
+                {
                     _currentView = value;
-					Title = value.Title;
+                    Title = value.Title;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(Title));
                 }
-			}
-		}
+            }
+        }
 
-		private object _dialogWindow;
-		public object DialogWindow
-		{
-			get => _dialogWindow;
-			private set
-			{
-				_dialogWindow = value;
-				OnPropertyChanged();
-			}
-		}
+        private object _dialogWindow;
+        public object DialogWindow
+        {
+            get => _dialogWindow;
+            private set
+            {
+                _dialogWindow = value;
+                OnPropertyChanged();
+            }
+        }
 
-		private Client _client;
-		public Client Client
-		{
-			get => _client;
-			private set
-			{
-				_client = value;
-				OnPropertyChanged();
-			}
-		}
+        private Client _client;
+        public Client Client
+        {
+            get => _client;
+            private set
+            {
+                _client = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ExtraCommandsIsVisible));
+                if (!ExtraCommandsIsVisible && CurrentView != ProductsVM)
+                    GoToProductsCommand.Execute(null);
+                OnClientUpdate?.Invoke(value);
+            }
+        }
+
+        public bool ExtraCommandsIsVisible
+        {
+            get
+            {
+                if (Client != null && Client.UserPosition != null)
+                {
+                    return _client.UserPosition.ID != (int)UserPosition.Positions.Guest
+                        && _client.UserPosition.ID != (int)UserPosition.Positions.Client;
+                }
+                return false;
+            }
+        }
 
         public static Client GetClient() => (System.Windows.Application.Current.MainWindow.DataContext as MainVM).Client;
-		public static void SetClient(Client client) => (System.Windows.Application.Current.MainWindow.DataContext as MainVM).Client = client;
+        public static void SetClient(Client client) => (System.Windows.Application.Current.MainWindow.DataContext as MainVM).Client = client;
     }
 }
