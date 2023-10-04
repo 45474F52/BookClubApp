@@ -69,6 +69,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\ModalDialogWindowBehaviour.cs" />
     <Compile Include="Model\Database\ExtendedProduct.cs" />
+    <Compile Include="Model\Database\NoGuestAccountException.cs" />
     <Compile Include="Model\Security\PasswordBindingMarshaller.cs" />
     <Compile Include="Model\Security\PasswordBoxHelper.cs" />
     <Compile Include="Model\Security\SecureStringExtensions.cs" />

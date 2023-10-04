@@ -22,7 +22,7 @@ namespace BookClubApp.ViewModel
 
             AuthorizeCommand = new RelayCommand(_ => DialogWindow = new AuthRegVM());
 
-            UnauthorizeCommand = new RelayCommand(_ => GetGuest(), __ => Client?.PositionID != 1);
+            UnauthorizeCommand = new RelayCommand(_ => GetGuest(), __ => Client != null && Client.PositionID != 1);
 
 			GetGuest();
         }
