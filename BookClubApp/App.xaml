@@ -3,16 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:view="clr-namespace:BookClubApp.View"
              xmlns:vm="clr-namespace:BookClubApp.ViewModel">
-    
+
     <Application.Resources>
         <ResourceDictionary>
-            
+
             <ResourceDictionary.MergedDictionaries>
-                
+
             </ResourceDictionary.MergedDictionaries>
 
             <view:OrderDialogWindow x:Key="{x:Type vm:OrderVM}"
                                     x:Shared="False" />
+
+            <view:AuthRegWindow x:Key="{x:Type vm:AuthRegVM}"
+                                x:Shared="False" />
 
             <DataTemplate DataType="{x:Type vm:ProductsVM}">
                 <view:ProductsView />
@@ -21,7 +24,11 @@
             <DataTemplate DataType="{x:Type vm:OrderVM}">
                 <view:OrderDialogWindow />
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type vm:AuthRegVM}">
+                <view:AuthRegWindow />
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,19 +1,14 @@
 ﻿using BookClubApp.Core;
 using BookClubApp.Model.Database;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+using System.Collections.Generic;
 
 namespace BookClubApp.ViewModel
 {
     public sealed class OrderVM : BaseVM
     {
         private readonly Random _rnd;
-
-        private IEnumerable<Order> _orders;
 
         public RelayCommand OrderCommand { get; private set; }
 
@@ -45,14 +40,14 @@ namespace BookClubApp.ViewModel
                 using (BookClubEntities db = new BookClubEntities())
                 {
                     Client client = (MainVM.GetClient() ?? await db.Client.FindAsync(1))
-                    ?? throw new InvalidOperationException("Невозможно создать заказ без аккаунта. Отсутствует гостевой аккаунт");
+                    ?? throw new NoGuestAccountException("Невозможно создать заказ без аккаунта");
 
                     Order.ClientID = client.ID;
                     Order.StatusID = 1;
                     Order.CreationDate = DateTime.Now;
                     Order.PickupPointID = SelectedPoint.ID;
                     Order.DeliveryTimeInDays = GetDeliveryTime();
-                    Order.PickupCode = GetPickupCode();
+                    Order.PickupCode = GetPickupCode(db);
 
                     db.Order.Add(Order);
                     await db.SaveChangesAsync();
@@ -64,20 +59,11 @@ namespace BookClubApp.ViewModel
         {
             Products = products;
             OnPropertyChanged(nameof(Products));
-            Dispatcher.CurrentDispatcher.Invoke(InitializeAsync);
-        }
-
-        private async Task InitializeAsync()
-        {
-            using (BookClubEntities db = new BookClubEntities())
-            {
-                _orders = await db.Order.ToListAsync();
-            }
         }
 
         private string GetDeliveryTime() => Products.Any(p => p.Quantity < 3) ? "6" : "3";
 
-        private string GetPickupCode()
+        private string GetPickupCode(BookClubEntities db)
         {
             int num1, num2, num3;
             string result = string.Empty;
@@ -88,7 +74,7 @@ namespace BookClubApp.ViewModel
                 num3 = _rnd.Next(0, 10);
                 result = string.Format("{0}{1}{2}", num1, num2, num3);
             }
-            while (_orders.Any(o => o.PickupCode == result));
+            while (db.Order.AsNoTracking().Any(o => o.PickupCode == result));
 
             return result;
         }
