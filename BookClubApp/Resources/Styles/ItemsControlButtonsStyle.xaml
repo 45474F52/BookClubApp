@@ -1,0 +1,79 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="EditBtn"
+           TargetType="{x:Type Button}">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border TextBlock.Foreground="{TemplateBinding Foreground}"
+                            TextBlock.FontSize="18"
+                            Background="{StaticResource WhiteBrush}"
+                            BorderBrush="{TemplateBinding Foreground}"
+                            BorderThickness="1"
+                            VerticalAlignment="Center"
+                            MinWidth="70"
+                            Padding="15"
+                            Cursor="Hand"
+                            CornerRadius="10 0 0 10">
+
+                        <ContentPresenter VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
+
+                    </Border>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+
+                            <Setter Property="Background"
+                                    Value="{StaticResource WhiteHoverBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style x:Key="DeleteBtn"
+           TargetType="{x:Type Button}">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border TextBlock.Foreground="{TemplateBinding Foreground}"
+                            TextBlock.FontSize="18"
+                            Background="{StaticResource RedBrush}"
+                            BorderBrush="{TemplateBinding Foreground}"
+                            BorderThickness="1"
+                            VerticalAlignment="Center"
+                            MinWidth="70"
+                            Padding="15"
+                            Cursor="Hand"
+                            Margin="5 0 0 0"
+                            CornerRadius="0 10 10 0">
+
+                        <ContentPresenter VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            
+                            <Setter Property="Background"
+                                    Value="{StaticResource RedHoverBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+</ResourceDictionary>

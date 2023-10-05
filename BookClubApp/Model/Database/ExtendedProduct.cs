@@ -21,7 +21,11 @@ namespace BookClubApp.Model.Database
 
         public string ToOrderString => ToOrder ? "Удалить из заказа" : "Добавить в заказ";
 
-        public void ChangeToOrderFlag() => ToOrder = !ToOrder;
+        public void ChangeToOrderFlag()
+        {
+            ToOrder = !ToOrder;
+            OnPropertyChanged(nameof(ToOrderString));
+        }
 
         private decimal SummOfDiscount => (Price * DiscountPercent) / 100;
 

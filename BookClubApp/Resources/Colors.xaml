@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Red">#E63946</Color>
+    <Color x:Key="RedHover">#C4303C</Color>
+    <Color x:Key="White">#F1FAEE</Color>
+    <Color x:Key="WhiteHover">#CDD5CA</Color>
+    <Color x:Key="Gray">#A8DADC</Color>
+    <Color x:Key="GrayHover">#8FB9BB</Color>
+    <Color x:Key="Blue">#457B9D</Color>
+    <Color x:Key="BlueDark">#1D3557</Color>
+
+    <SolidColorBrush x:Key="RedBrush"
+                     Color="#E63946" />
+    <SolidColorBrush x:Key="RedHoverBrush"
+                     Color="#C4303C" />
+    <SolidColorBrush x:Key="WhiteBrush"
+                     Color="#F1FAEE" />
+    <SolidColorBrush x:Key="WhiteHoverBrush"
+                     Color="#CDD5CA" />
+    <SolidColorBrush x:Key="GrayBrush"
+                     Color="#A8DADC" />
+    <SolidColorBrush x:Key="GrayHoverBrush"
+                     Color="#8FB9BB" />
+    <SolidColorBrush x:Key="BlueBrush"
+                     Color="#457B9D" />
+    <SolidColorBrush x:Key="BlueDarkBrush"
+                     Color="#1D3557" />
+
+    <LinearGradientBrush x:Key="Gradient" StartPoint="1,1" EndPoint="1,0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#a8dadc" Offset=".0" />
+            <GradientStop Color="#99c8cd" Offset=".1" />
+            <GradientStop Color="#89b5be" Offset=".2" />
+            <GradientStop Color="#7aa3b0" Offset=".3" />
+            <GradientStop Color="#6a91a1" Offset=".4" />
+            <GradientStop Color="#5b7e92" Offset=".5" />
+            <GradientStop Color="#4b6c83" Offset=".6" />
+            <GradientStop Color="#3c5a75" Offset=".7" />
+            <GradientStop Color="#2c4766" Offset=".8" />
+            <GradientStop Color="#1d3557" Offset=".9" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+</ResourceDictionary>

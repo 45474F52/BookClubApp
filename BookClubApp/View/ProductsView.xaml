@@ -6,6 +6,7 @@
              xmlns:vm="clr-namespace:BookClubApp.ViewModel"
              xmlns:db="clr-namespace:BookClubApp.Model.Database"
              xmlns:core="clr-namespace:BookClubApp.Core"
+             xmlns:conv="clr-namespace:BookClubApp.Model.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -17,6 +18,7 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="boolToVis" />
+        <conv:IsNoZeroConverter x:Key="isNoZero" />
     </UserControl.Resources>
 
     <Grid>
@@ -31,7 +33,9 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <ListView Background="WhiteSmoke"
+            <ListView Background="Transparent"
+                      BorderThickness="0"
+                      Margin="10"
                       Focusable="False"
                       SelectionMode="Single"
                       HorizontalContentAlignment="Stretch"
@@ -42,9 +46,9 @@
                         <Border Margin="5"
                                 Padding="10"
                                 BorderThickness="1"
-                                BorderBrush="Black"
+                                BorderBrush="{StaticResource BlueDarkBrush}"
                                 CornerRadius="20 0 20 0"
-                                Background="Transparent">
+                                Background="{StaticResource GrayBrush}">
 
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -88,6 +92,10 @@
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
+
+                        <EventSetter Event="MouseDoubleClick"
+                                     Handler="ListViewItem_MouseDoubleClick" />
+                        
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListViewItem">
@@ -105,12 +113,12 @@
                                 <Setter Property="Cursor"
                                         Value="Hand" />
                             </Trigger>
-                            <Trigger Property="IsSelected"
-                                     Value="True">
 
-                                <Setter Property="Foreground"
-                                        Value="ForestGreen" />
-                            </Trigger>
+                            <DataTrigger Binding="{Binding CountInOrder, Converter={StaticResource isNoZero}}"
+                                         Value="True">
+                                <Setter Property="Opacity"
+                                        Value=".5" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
@@ -126,6 +134,8 @@
                     FontWeight="Bold"
                     BorderThickness="2"
                     Padding="20 0"
+                    Margin="0 0 0 10"
+                    Background="{StaticResource GrayBrush}"
                     Command="{Binding ShowOrderCommand}">
 
                 <TextBlock TextAlignment="Center">

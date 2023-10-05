@@ -83,6 +83,11 @@ namespace BookClubApp.ViewModel
                     OnPropertyChanged(nameof(Order));
                     OnPropertyChanged(nameof(OrderSumm));
                 }
+            }, arg =>
+            {
+                if (arg is Product product)
+                    return product.CountInOrder < product.Quantity;
+                return false;
             });
 
             DecreaseCommand = new RelayCommand(arg =>

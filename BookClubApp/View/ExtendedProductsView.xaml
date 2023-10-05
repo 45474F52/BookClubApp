@@ -21,7 +21,9 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <ListView Background="WhiteSmoke"
+        <ListView Background="Transparent"
+                  BorderThickness="0"
+                  Margin="10"
                   Focusable="False"
                   SelectionMode="Single"
                   HorizontalContentAlignment="Stretch"
@@ -32,9 +34,9 @@
                     <Border Margin="5"
                             Padding="10"
                             BorderThickness="1"
-                            BorderBrush="Black"
+                            BorderBrush="{StaticResource BlueDarkBrush}"
                             CornerRadius="20 0 20 0"
-                            Background="Transparent">
+                            Background="{StaticResource GrayBrush}">
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -67,19 +69,12 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Button Content="✏"
-                                        VerticalAlignment="Center"
-                                        Padding="15"
-                                        FontSize="18"
-                                        Background="Gold"
+                                        Style="{StaticResource EditBtn}"
                                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.EditProductCommand}"
                                         CommandParameter="{Binding}" />
                                 <Button Grid.Column="1"
                                         Content="🗑"
-                                        VerticalAlignment="Center"
-                                        Padding="15"
-                                        Margin="10 0 0 0"
-                                        FontSize="18"
-                                        Background="Red"
+                                        Style="{StaticResource DeleteBtn}"
                                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteProductCommand}"
                                         CommandParameter="{Binding}" />
                             </Grid>
@@ -98,19 +93,6 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter Property="Cursor"
-                                    Value="Hand" />
-                        </Trigger>
-                        <Trigger Property="IsSelected"
-                                 Value="True">
-
-                            <Setter Property="Foreground"
-                                    Value="ForestGreen" />
-                        </Trigger>
-                    </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
 

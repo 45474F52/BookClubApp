@@ -26,28 +26,48 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <!--TopBar-->
         <Grid Margin="0 10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width=".5*" />
                 <ColumnDefinition />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal"
-                        Margin="10 0">
+            <!--UserInfo-->
+            <Grid Margin="10 0"
+                  ToolTipService.Placement="Top"
+                  ToolTipService.HorizontalOffset="100"
+                  ToolTipService.ToolTip="{Binding ElementName=ClientInfo,Path=Text}">
 
-                <Image VerticalAlignment="Center" />
-                <TextBlock FontSize="16"
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Image VerticalAlignment="Center"
+                       Stretch="Fill"
+                       StretchDirection="Both"
+                       MaxHeight="30"
+                       Margin="0 0 10 0"
+                       Source="{Binding Client.PathToIcon}" />
+                
+                <TextBlock x:Name="ClientInfo"
+                           Grid.Column="1"
+                           FontSize="16"
                            FontWeight="Bold"
-                           VerticalAlignment="Center">
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis">
                     
                     <Run Text="{Binding Client.UserPosition.Position}" />
                     <Run Text=": " />
                     <Run Text="{Binding Client.Login}" />
                 </TextBlock>
-            </StackPanel>
+            </Grid>
 
-            <Grid Grid.Column="1">
+            <!--Navigation Buttons-->
+            <Grid Grid.Column="1"
+                  HorizontalAlignment="Stretch">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -55,36 +75,29 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Padding="20 10"
-                        HorizontalAlignment="Center"
-                        Cursor="Hand"
-                        FontSize="14"
+                <Button Style="{StaticResource NavButton}"
                         Command="{Binding GoToProductsCommand}"
                         Visibility="{Binding ExtraCommandsIsVisible, Converter={StaticResource boolToVis}}">
                     <TextBlock Text="Товары" />
                 </Button>
 
                 <Button Grid.Column="1"
-                        Padding="20 10"
-                        HorizontalAlignment="Center"
-                        Cursor="Hand"
-                        FontSize="14"
+                        Style="{StaticResource NavButton}"
                         Command="{Binding GoToExtendedProductsCommand}"
                         Visibility="{Binding IsAdmin, Converter={StaticResource boolToVis}}">
-                    <TextBlock Text="Товары (расшир.) ✏" />
+                    <TextBlock Text="Товары (расшир.) ✏"
+                               TextTrimming="WordEllipsis" />
                 </Button>
 
                 <Button Grid.Column="2"
-                        Padding="20 10"
-                        HorizontalAlignment="Center"
-                        Cursor="Hand"
-                        FontSize="14"
+                        Style="{StaticResource NavButton}"
                         Command="{Binding GoToOrdersCommand}"
                         Visibility="{Binding ExtraCommandsIsVisible, Converter={StaticResource boolToVis}}">
                     <TextBlock Text="Заказы" />
                 </Button>
             </Grid>
 
+            <!--Authorization Buttons-->
             <Grid Grid.Column="2">
 
                 <Grid.ColumnDefinitions>
@@ -92,18 +105,23 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Padding="10"
-                        Cursor="Hand"
+                <Button ToolTipService.ToolTip="Войти в аккаунт"
+                        ToolTipService.Placement="Top"
+                        ToolTipService.HorizontalOffset="-35"
+                        ToolTipService.VerticalOffset="-5"
                         FontSize="14"
+                        Style="{StaticResource AuthButton}"
                         Command="{Binding AuthorizeCommand}">
                     <TextBlock Text="👤" />
                 </Button>
 
                 <Button Grid.Column="1"
-                        Padding="10"
                         Margin="30 0"
-                        Cursor="Hand"
                         FontSize="14"
+                        ToolTipService.ToolTip="Выйти из аккаунта"
+                        ToolTipService.Placement="Top"
+                        ToolTipService.VerticalOffset="-5"
+                        Style="{StaticResource AuthButton}"
                         Command="{Binding UnauthorizeCommand}">
                     <TextBlock Text="❌" />
                 </Button>
