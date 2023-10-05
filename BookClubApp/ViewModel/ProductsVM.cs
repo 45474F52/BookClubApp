@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Threading;
 
 namespace BookClubApp.ViewModel
@@ -14,10 +13,6 @@ namespace BookClubApp.ViewModel
     {
         public RelayCommand OrderCommand { get; private set; }
         public RelayCommand ShowOrderCommand { get; private set; }
-
-        public RelayCommand AddProductCommand { get; private set; }
-        public RelayCommand EditProductCommand { get; private set; }
-        public RelayCommand DeleteProductCommand { get; private set; }
 
         public ObservableCollection<Product> Products { get; private set; }
 
@@ -52,56 +47,6 @@ namespace BookClubApp.ViewModel
             OrderCommand = new RelayCommand(product => (product as Product)?.ChangeToOrderFlag());
 
             ShowOrderCommand = new RelayCommand(_ => DialogWindow = new OrderVM(Products.Where(p => p.ToOrder)));
-
-            AddProductCommand = new RelayCommand(_ =>
-            {
-                /*
-                 * var vm = new CreateProductVM();
-                 * vm.OnProductCreating += async product =>
-                 * {
-                 *      using (BookClubEntities db = new BookClubEntities())
-                 *      {
-                 *          db.Product.Add(product);
-                 *          await db.SaveChangesAsync();
-                 *      }
-                 *      Products.Add(product);
-                 * }
-                 * DialogWindow = vm;
-                */
-            }, __ => IsAdmin);
-
-            EditProductCommand = new RelayCommand(arg =>
-            {
-                if (arg is Product product)
-                {
-                    /*
-                    * var vm = new CreateProductVM(product);
-                    * vm.OnProductCreating += async _ => await SetProductsAsync();
-                    * DialogWindow = vm;
-                    */
-                }
-            }, __ => IsAdmin);
-
-            DeleteProductCommand = new RelayCommand(async arg =>
-            {
-                if (arg is Product product)
-                {
-                    MessageBoxResult result = MessageBox.Show(
-                        "Вы уверены что хотите удалить этот товар?\nДействие нельзя будет отменить!",
-                        "Подвердите удаление",
-                        MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        using (BookClubEntities db = new BookClubEntities())
-                        {
-                            db.Product.Remove(db.Product.Find(product.ID));
-                            await db.SaveChangesAsync();
-                        }
-                        Products.Remove(product);
-                    }
-                }
-            }/*, __ => IsAdmin*/);
 
             Dispatcher.CurrentDispatcher.Invoke(SetProductsAsync);
         }

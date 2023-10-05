@@ -113,7 +113,7 @@ namespace BookClubApp.ViewModel
                             + Environment.NewLine + Environment.NewLine
                             + "Зарегистрировать нового пользователя?",
                             "Пользователь не существует!",
-                            MessageBoxButton.YesNo, MessageBoxImage.Information);
+                            MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.No);
 
                     if (result == MessageBoxResult.Yes)
                     {

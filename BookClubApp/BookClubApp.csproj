@@ -79,6 +79,8 @@
     <Compile Include="ViewModel\AuthRegVM.cs" />
     <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="ViewModel\EditOrderVM.cs" />
+    <Compile Include="ViewModel\EditProductsVM.cs" />
+    <Compile Include="ViewModel\ExtendedProductsVM.cs" />
     <Compile Include="ViewModel\HomeVM.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\OrdersVM.cs" />
@@ -89,6 +91,12 @@
     </Compile>
     <Compile Include="View\EditOrderWindow.xaml.cs">
       <DependentUpon>EditOrderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditProductsWindow.xaml.cs">
+      <DependentUpon>EditProductsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ExtendedProductsView.xaml.cs">
+      <DependentUpon>ExtendedProductsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -121,6 +129,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditProductsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ExtendedProductsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

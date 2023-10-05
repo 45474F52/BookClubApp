@@ -11,12 +11,10 @@ namespace BookClubApp.ViewModel
         public event Action<Client> OnClientUpdate;
 
         private ProductsVM _productsVM;
-        private ProductsVM ProductsVM => LazyInitializer.EnsureInitialized(ref _productsVM, () =>
-        {
-            var productsVM = new ProductsVM();
-            OnClientUpdate += client => productsVM.IsAdmin = client.PositionID == (int)UserPosition.Positions.Administrator;
-            return productsVM;
-        });
+        private ProductsVM ProductsVM => LazyInitializer.EnsureInitialized(ref _productsVM);
+
+        private ExtendedProductsVM _extendedProductsVM;
+        private ExtendedProductsVM ExtendedProductsVM => LazyInitializer.EnsureInitialized(ref _extendedProductsVM);
 
         private OrdersVM _ordersVM;
         private OrdersVM OrdersVM => LazyInitializer.EnsureInitialized(ref _ordersVM);
@@ -26,6 +24,7 @@ namespace BookClubApp.ViewModel
 
         public RelayCommand GoToOrdersCommand { get; private set; }
         public RelayCommand GoToProductsCommand { get; private set; }
+        public RelayCommand GoToExtendedProductsCommand { get; private set; }
 
         public MainVM()
         {
@@ -39,6 +38,7 @@ namespace BookClubApp.ViewModel
 
             GoToOrdersCommand = new RelayCommand(_ => CurrentView = OrdersVM, __ => CurrentView != OrdersVM);
             GoToProductsCommand = new RelayCommand(_ => CurrentView = ProductsVM, __ => CurrentView != ProductsVM);
+            GoToExtendedProductsCommand = new RelayCommand(_ => CurrentView = ExtendedProductsVM, __ => CurrentView != ExtendedProductsVM);
 
             GetGuest();
         }
@@ -91,7 +91,8 @@ namespace BookClubApp.ViewModel
                 _client = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ExtraCommandsIsVisible));
-                if (!ExtraCommandsIsVisible && CurrentView != ProductsVM)
+                OnPropertyChanged(nameof(IsAdmin));
+                if (!ExtraCommandsIsVisible && !IsAdmin && CurrentView != ProductsVM)
                     GoToProductsCommand.Execute(null);
                 OnClientUpdate?.Invoke(value);
             }
@@ -105,6 +106,18 @@ namespace BookClubApp.ViewModel
                 {
                     return _client.UserPosition.ID != (int)UserPosition.Positions.Guest
                         && _client.UserPosition.ID != (int)UserPosition.Positions.Client;
+                }
+                return false;
+            }
+        }
+
+        public bool IsAdmin
+        {
+            get
+            {
+                if (Client != null && Client.UserPosition != null)
+                {
+                    return _client.UserPosition.ID == (int)UserPosition.Positions.Administrator;
                 }
                 return false;
             }

@@ -50,7 +50,8 @@
             <Grid Grid.Column="1">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
@@ -62,8 +63,18 @@
                         Visibility="{Binding ExtraCommandsIsVisible, Converter={StaticResource boolToVis}}">
                     <TextBlock Text="Товары" />
                 </Button>
-                
+
                 <Button Grid.Column="1"
+                        Padding="20 10"
+                        HorizontalAlignment="Center"
+                        Cursor="Hand"
+                        FontSize="14"
+                        Command="{Binding GoToExtendedProductsCommand}"
+                        Visibility="{Binding IsAdmin, Converter={StaticResource boolToVis}}">
+                    <TextBlock Text="Товары (расшир.) ✏" />
+                </Button>
+
+                <Button Grid.Column="2"
                         Padding="20 10"
                         HorizontalAlignment="Center"
                         Cursor="Hand"

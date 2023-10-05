@@ -20,8 +20,15 @@
             <view:EditOrderWindow x:Key="{x:Type vm:EditOrderVM}"
                                   x:Shared="False" />
 
+            <view:EditProductsWindow x:Key="{x:Type vm:EditProductsVM}"
+                                     x:Shared="False" />
+
             <DataTemplate DataType="{x:Type vm:ProductsVM}">
                 <view:ProductsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ExtendedProductsVM}">
+                <view:ExtendedProductsView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:OrderVM}">
@@ -38,6 +45,10 @@
 
             <DataTemplate DataType="{x:Type vm:EditOrderVM}">
                 <view:EditOrderWindow />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:EditProductsVM}">
+                <view:EditProductsWindow />
             </DataTemplate>
 
         </ResourceDictionary>

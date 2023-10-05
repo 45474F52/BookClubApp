@@ -68,33 +68,8 @@
                                     <TextBlock Text="{Binding Quantity, StringFormat=Кол-во: \{0\}}"
                                                FontSize="14" />
                                 </StackPanel>
-
-                                <Grid Grid.Column="1">
-                                    
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Button Content="✏"
-                                            VerticalAlignment="Center"
-                                            Padding="15"
-                                            FontSize="18"
-                                            Background="Gold"
-                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.EditProductCommand}"
-                                            CommandParameter="{Binding}" />
-                                    <Button Grid.Column="1"
-                                            Content="🗑"
-                                            VerticalAlignment="Center"
-                                            Padding="15"
-                                            Margin="10 0 0 0"
-                                            FontSize="18"
-                                            Background="Red"
-                                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.DeleteProductCommand}"
-                                            CommandParameter="{Binding}" />
-                                </Grid>
                             </Grid>
-                            
+
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -141,16 +116,6 @@
                 </ListView.ItemContainerStyle>
 
             </ListView>
-
-            <Button Grid.Row="1"
-                    Cursor="Hand"
-                    FontSize="18"
-                    FontWeight="Bold"
-                    HorizontalAlignment="Center"
-                    Padding="100 10"
-                    Margin="0 10"
-                    Content="Добавить продукт"
-                    Command="{Binding AddProductCommand}" />
         </Grid>
 
         <Grid Grid.Column="1"
